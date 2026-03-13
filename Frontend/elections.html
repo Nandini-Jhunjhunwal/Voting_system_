@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elections</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav>
+    <a href="index.html">Home</a> <!-- ✅ Added Home button -->
+    <a href="dashboard.html">Personal Info</a>
+    <a href="elections.html" class="active">Elections</a>
+    <a href="#">Contact</a>
+    <a href="#" onclick="logout()">Logout</a>
+  </nav>
+
+  <section class="container">
+    <!-- Search bar -->
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search elections...">
+    </div>
+
+    <h3>Upcoming Elections :</h3>
+    <div id="upcoming-list"></div>
+
+    <h3>Other Elections :</h3>
+    <div id="other-list" class="scrollable-list"></div>
+  </section>
+
+  <script>
+    const token = localStorage.getItem("token");
+if (!token) {
+  alert("Please login first!");
+  window.location.href = "login.html";
+}
+
+    const states = [
+      "Uttar Pradesh", "Manipur", "Chhattisgarh", "Bengaluru",
+      "Gurgaon", "Delhi", "Maharashtra", "Rajasthan",
+      "Punjab", "Assam", "Goa", "Kerala", "Odisha"
+    ];
+
+    // Random date in 2025
+    function getRandomDate() {
+      const start = new Date(2025, 0, 1);
+      const end = new Date(2025, 11, 31);
+      const randomTime = start.getTime() + Math.random() * (end.getTime() - start.getTime());
+      const d = new Date(randomTime);
+      return d.toLocaleDateString("en-GB"); // DD-MM-YYYY
+    }
+
+    // Shuffle array (to avoid duplicates)
+    function shuffleArray(array) {
+      return array.sort(() => Math.random() - 0.5);
+    }
+
+    // Generate unique elections
+    function generateElections(count) {
+      let shuffled = shuffleArray([...states]); // copy + shuffle
+      let elections = shuffled.slice(0, count).map(state => ({
+        name: state + " State Election",
+        date: getRandomDate()
+      }));
+      return elections;
+    }
+
+    // Store elections
+    let allUpcoming = generateElections(3);
+    let allOthers = generateElections(8);
+
+    // Render elections
+    function renderElections(upcoming, others) {
+      const upcomingList = document.getElementById("upcoming-list");
+      const otherList = document.getElementById("other-list");
+
+      upcomingList.innerHTML = "";
+      otherList.innerHTML = "";
+
+      upcoming.forEach(e => {
+        let div = document.createElement("div");
+        div.className = "election-card";
+        div.innerHTML = `<span>${e.name}:</span><span>${e.date}</span>`;
+        div.onclick = () => goToVoting(e.name);
+        upcomingList.appendChild(div);
+      });
+
+      others.forEach(e => {
+        let div = document.createElement("div");
+        div.className = "election-card";
+        div.innerHTML = `<span>${e.name}:</span><span>${e.date}</span>`;
+        div.onclick = () => goToVoting(e.name);
+        otherList.appendChild(div);
+      });
+    }
+
+    // Live search
+    document.getElementById("searchInput").addEventListener("input", function() {
+      const query = this.value.toLowerCase();
+      const filteredUpcoming = allUpcoming.filter(e => e.name.toLowerCase().includes(query));
+      const filteredOthers = allOthers.filter(e => e.name.toLowerCase().includes(query));
+      renderElections(filteredUpcoming, filteredOthers);
+    });
+
+    // Navigate to vote page
+    function goToVoting(electionName) {
+      localStorage.setItem("selectedElection", electionName);
+      window.location.href = "vote.html";
+    }
+
+    // Logout function
+    function logout() {
+      localStorage.removeItem("loggedInUser");
+      localStorage.removeItem("isLoggedIn");
+      window.location.href = "index.html"; // ✅ Go back to homepage
+    }
+
+    // Initial render
+    renderElections(allUpcoming, allOthers);
+  </script>
+</body>
+</html>

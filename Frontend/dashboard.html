@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <header class="dashboard-header">
+    <nav>
+      <ul class="nav-tabs">
+        <li><a href="index.html">Home</a></li> <!-- ✅ Added Home button -->
+        <li><a href="dashboard.html" class="active">Personal Info</a></li>
+        <li><a href="elections.html">Elections</a></li>
+        <li><a href="#">Contact</a></li>
+
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Profile Section -->
+  <section class="profile-container">
+    <!-- Left side: Profile Image -->
+    <div class="profile-left">
+      <img id="profilePic" src="user.png" alt="Profile Picture" class="profile-pic">
+      <input type="file" id="profileUpload" accept="image/*" style="display:none;">
+      <button class="btn" onclick="document.getElementById('profileUpload').click()">Change profile picture</button>
+      <p class="edit-link" onclick="enableAddressEdit()">✎ Edit Profile</p>
+      <!-- ✅ Logout styled like edit link -->
+      <p class="edit-link" onclick="logout()">Logout</p>
+    </div>
+
+    <!-- Right side: User Details -->
+    <div class="profile-right" id="profileInfo">
+      <!-- JS will inject user details -->
+    </div>
+  </section>
+
+  <script>
+    const token = localStorage.getItem("token");
+if (!token) {
+  alert("Please login first!");
+  window.location.href = "login.html";
+}
+
+    // Fetch logged-in user
+    let user = JSON.parse(localStorage.getItem("loggedInUser"));
+
+    if (!user) {
+      alert("No user logged in!");
+      window.location.href = "login.html";
+    } else {
+      renderProfile();
+    }
+
+    function renderProfile() {
+      document.getElementById("profilePic").src = user.profilePic || "user.png";
+
+      document.getElementById("profileInfo").innerHTML = `
+        <span class="label">Name:</span> <span>${user.name}</span>
+        <span class="label">Father’s/Mother’s Name:</span> <span>${user.father}</span>
+        <span class="label">Age:</span> <span>${user.age || "N/A"}</span>
+        <span class="label">Mobile Number:</span> <span>${user.mobile}</span>
+        <span class="label">Email:</span> <span>${user.email}</span>
+        <span class="label">Aadhar Number:</span> <span>${user.aadhar}</span>
+        <span class="label">Address:</span> 
+        <span><textarea id="userAddress" disabled>${user.address || "Not provided"}</textarea></span>
+        <span class="label">Eligible:</span> <span>True</span>
+        <span class="label">Verified:</span> <span>True</span>
+        <button class="save-btn" id="saveBtn" style="display:none;">Save Changes</button>
+      `;
+    }
+
+    // Handle profile image upload
+    document.getElementById("profileUpload").addEventListener("change", function(event) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById("profilePic").src = e.target.result;
+        user.profilePic = e.target.result;
+        localStorage.setItem("loggedInUser", JSON.stringify(user));
+      }
+      reader.readAsDataURL(event.target.files[0]);
+    });
+
+    // Enable/disable address edit
+    function enableAddressEdit() {
+      const addressField = document.getElementById("userAddress");
+      const saveBtn = document.getElementById("saveBtn");
+
+      addressField.disabled = false;
+      addressField.focus();
+      saveBtn.style.display = "inline-block";
+
+      saveBtn.onclick = function() {
+        user.address = addressField.value;
+        localStorage.setItem("loggedInUser", JSON.stringify(user));
+        addressField.disabled = true;
+        saveBtn.style.display = "none";
+        alert("Address updated successfully!");
+      }
+    }
+
+    // Logout function
+    function logout() {
+      localStorage.removeItem("loggedInUser");
+      localStorage.removeItem("isLoggedIn");
+      window.location.href = "index.html"; // ✅ Go back to homepage
+    }
+  </script>
+</body>
+</html>

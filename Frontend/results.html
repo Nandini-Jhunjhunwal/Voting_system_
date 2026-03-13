@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Election Results</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <section class="container">
+    <h2>Election Results</h2>
+    <div id="results"></div>
+  </section>
+
+  <script>
+    async function fetchResults() {
+      try {
+        const res = await fetch("http://localhost:5000/api/votes/results");
+        const data = await res.json();
+        const resultsDiv = document.getElementById("results");
+
+        if (res.ok) {
+          resultsDiv.innerHTML = data
+            .map(item => `<p><strong>${item._id}:</strong> ${item.totalVotes} votes</p>`)
+            .join("");
+        } else {
+          resultsDiv.innerHTML = "<p>Failed to load results.</p>";
+        }
+      } catch (error) {
+        document.getElementById("results").innerHTML = "<p>Server error!</p>";
+      }
+    }
+    fetchResults();
+  </script>
+</body>
+</html>

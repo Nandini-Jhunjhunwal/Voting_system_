@@ -1,0 +1,179 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background-color: #09131f;
+  color: #fff;
+}
+
+/* Navigation Tabs */
+.dashboard-header {
+  padding: 20px 40px;
+  background-color: #09131f;
+}
+
+.nav-tabs {
+  list-style: none;
+  display: flex;
+  justify-content: flex-end;
+  gap: 40px;
+}
+
+.nav-tabs a {
+  text-decoration: none;
+  font-size: 16px;
+  color: #fff;
+  transition: 0.3s;
+}
+
+.nav-tabs a:hover,
+.nav-tabs .active {
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 4px;
+}
+
+.vote-btn {
+  background-color: #007bff;
+  padding: 6px 16px;
+  border-radius: 6px;
+}
+
+.vote-btn:hover {
+  background-color: #0056b3;
+}
+
+/* ✅ Removed old logout-btn red style */
+.logout-btn {
+  display: none;
+}
+
+/* Profile Section */
+.profile-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 60px;
+  padding: 60px;
+  max-width: 1200px;
+  margin: 40px auto;
+  background: #0b1a2e;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+.profile-left {
+  flex: 1;
+  text-align: center;
+}
+
+.profile-pic {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  border: 4px solid #101c29;
+  object-fit: cover;
+}
+
+.btn {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  display: block;
+  width: 100%;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+.edit-link {
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #2c5581;
+}
+
+.edit-link:hover {
+  color: #507fa3;
+}
+
+/* User Info (Right Side) */
+.profile-right {
+  flex: 2;
+  font-size: 16px;
+  line-height: 2;
+  display: grid;
+  grid-template-columns: 200px 1fr; /* first column = labels, second = values */
+  gap: 8px ; /* row gap and column gap */
+  align-items: start;
+}
+
+.profile-right .label {
+  font-size: 14px;
+  color: #507fa3;
+  font-weight: 500;
+}
+
+.profile-right span {
+  font-size: 16px;
+  color: #fff;
+}
+
+/* Address field */
+.profile-right textarea {
+  width: 100%;
+  min-height: 70px;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background: #102542;
+  color: #fff;
+  resize: vertical;
+}
+
+/* Save Button under Address */
+.save-btn {
+  grid-column: 2; /* places button under value column */
+  margin-top: 5px;
+  padding: 8px 16px;
+  border: none;
+  background: #007bff;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.save-btn:hover {
+  background: #0056b3;
+}
+
+/* Responsive */
+@media screen and (max-width: 900px) {
+  .profile-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 30px;
+  }
+
+  .profile-right {
+    width: 100%;
+  }
+
+  .info-row {
+    flex-direction: column;
+    gap: 5px;
+  }
+}

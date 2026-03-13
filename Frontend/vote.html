@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voting Panel</title>
+  <link rel="stylesheet" href="vote.css">
+</head>
+<body>
+  <section class="container">
+    <h2>Voting Panel</h2>
+    <h3 id="electionTitle"></h3>
+
+    <form id="voteForm">
+      <!-- Candidate 1 -->
+      <div class="candidate">
+        <label class="candidate-header">
+          <input type="radio" name="candidate" value="Baburao" class="radio-btn">
+          <span class="candidate-name">Baburao</span>
+          <span class="party-name">Independent</span>
+          <img src="icon/specs.png" alt="Independent" class="party-icon">
+          <span class="dropdown-icon">▶</span>
+        </label>
+        <div class="candidate-details">
+          <p><strong>Name:</strong> Baburao Ganpatrao Apte</p>
+          <p><strong>Age:</strong> 58</p>
+          <p><strong>Party:</strong> Independent</p>
+          <p><strong>Education:</strong> BA (English Hons.)</p>
+        </div>
+      </div>
+
+      <!-- Candidate 2 -->
+      <div class="candidate">
+        <label class="candidate-header">
+          <input type="radio" name="candidate" value="Narendra Modi" class="radio-btn">
+          <span class="candidate-name">Narendra Modi</span>
+          <span class="party-name">BJP</span>
+          <img src="icon/bjp.png" alt="BJP" class="party-icon">
+          <span class="dropdown-icon">▶</span>
+        </label>
+        <div class="candidate-details">
+          <p><strong>Name:</strong> Narendra Modi</p>
+          <p><strong>Age:</strong> 75</p>
+          <p><strong>Party:</strong> BJP</p>
+          <p><strong>Education:</strong> MA Political Science</p>
+        </div>
+      </div>
+
+      <!-- Candidate 3 -->
+      <div class="candidate">
+        <label class="candidate-header">
+          <input type="radio" name="candidate" value="Rahul Gandhi" class="radio-btn">
+          <span class="candidate-name">Rahul Gandhi</span>
+          <span class="party-name">Congress</span>
+          <img src="icon/hand.png" alt="Congress" class="party-icon">
+          <span class="dropdown-icon">▶</span>
+        </label>
+        <div class="candidate-details">
+          <p><strong>Name:</strong> Rahul Gandhi</p>
+          <p><strong>Age:</strong> 56</p>
+          <p><strong>Party:</strong> Congress</p>
+          <p><strong>Education:</strong> MPhil, Cambridge</p>
+        </div>
+      </div>
+
+      <!-- Candidate 4 -->
+      <div class="candidate">
+        <label class="candidate-header">
+          <input type="radio" name="candidate" value="Arvind Kejriwal" class="radio-btn">
+          <span class="candidate-name">Arvind Kejriwal</span>
+          <span class="party-name">AAP</span>
+          <img src="icon/aap.png" alt="AAP" class="party-icon">
+          <span class="dropdown-icon">▶</span>
+        </label>
+        <div class="candidate-details">
+          <p><strong>Name:</strong> Arvind Kejriwal</p>
+          <p><strong>Age:</strong> 62</p>
+          <p><strong>Party:</strong> AAP</p>
+          <p><strong>Education:</strong> IIT Kharagpur</p>
+        </div>
+      </div>
+
+      <!-- Confirmation Checkbox -->
+      <div class="confirm">
+        <input type="checkbox" id="confirmVote" required>
+        <label for="confirmVote" id="confirmText">I have selected my candidate.</label>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="submit-btn" disabled>SUBMIT</button>
+    </form>
+  </section>
+
+ <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('voteForm');
+  const submitBtn = document.querySelector('.submit-btn');
+  const checkbox = document.getElementById('confirmVote');
+  const radios = document.querySelectorAll('input[name="candidate"]');
+
+  // Initially disable submit button
+  submitBtn.disabled = true;
+
+  function updateSubmitState() {
+    const candidateSelected = Array.from(radios).some(r => r.checked);
+    submitBtn.disabled = !(candidateSelected && checkbox.checked);
+  }
+
+  radios.forEach(r => r.addEventListener('change', updateSubmitState));
+  checkbox.addEventListener('change', updateSubmitState);
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const chosen = document.querySelector('input[name="candidate"]:checked');
+    if (!chosen) {
+      alert('Please select a candidate');
+      return;
+    }
+
+    // Retrieve stored auth token from login (must set during login)
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Please log in first.');
+      window.location.href = 'login.html';
+      return;
+    }
+
+    // Send vote to backend
+    try {
+      const res = await fetch('http://localhost:5000/api/votes/cast', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+  candidate: chosen.value,
+  election: localStorage.getItem('selectedElection')
+})
+
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert('✅ ' + data.message);
+        window.location.href = 'elections.html';
+      } else {
+        alert('❌ ' + data.message);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Server error while submitting your vote.');
+    }
+  });
+});
+</script>
+
+</body>
+</html>

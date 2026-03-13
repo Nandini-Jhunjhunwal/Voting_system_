@@ -1,0 +1,103 @@
+body {
+  background: #09131f;
+  color: white;
+  font-family: Arial, sans-serif;
+  margin: 0;
+}
+
+nav {
+  display: flex;
+  justify-content: flex-end; /* aligns nav links to the right */
+  padding: 15px;
+  background: #09131f;
+  gap: 20px;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  padding: 6px 12px;
+}
+
+nav a.active {
+  border-bottom: 2px solid #fff;
+}
+
+nav a.vote-btn {
+  background: dodgerblue;
+  border-radius: 5px;
+}
+
+.container {
+  max-width: 700px;
+  margin: 20px auto;
+}
+
+h3 {
+  margin-top: 30px;
+}
+
+/* Search box styling */
+.search-box {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #e7ebee;
+  border-radius: 6px;
+  font-size: 15px;
+  outline: none;
+  background: #b1c0ce;
+  color: #000;
+}
+
+.search-box input:focus {
+  border-color: dodgerblue;
+  box-shadow: 0 0 4px rgba(30, 144, 255, 0.5);
+}
+
+.election-card {
+  display: flex;
+  justify-content: space-between;
+  background: #bfbfbf;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 5px;
+  cursor: pointer;
+  color: black;
+  transition: background 0.2s;
+}
+
+.election-card:hover {
+  background: #d6d6d6;
+}
+
+
+/* Scrollable elections list */
+.scrollable-list {
+  max-height: 250px;
+  overflow-y: auto;
+  margin-top: 10px;
+  border: 1px solid #555;
+  border-radius: 6px;
+  padding: 5px;
+}
+
+/* Sleek scrollbar */
+.scrollable-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollable-list::-webkit-scrollbar-thumb {
+  background: #355b7b;
+  border-radius: 10px;
+}
+
+.scrollable-list::-webkit-scrollbar-thumb:hover {
+  background: #1e3a56;
+}

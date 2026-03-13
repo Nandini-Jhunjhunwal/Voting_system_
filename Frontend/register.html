@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="form-body">
+
+  <div class="form-container">
+    <!-- Left Illustration -->
+    <div class="form-image">
+      <img src="icon/registerr.png" alt="Registration Illustration">
+    </div>
+
+    <!-- Right Form -->
+    <div class="form-box">
+      <h2>Registration form</h2>
+      <form id="registerForm">
+        <input type="text" id="name" placeholder="Name" required>
+        <input type="date" id="dob" required>
+        <input type="text" id="father" placeholder="Father's/Mother's Name" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="text" id="mobile" placeholder="Mobile No" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <input type="password" id="repassword" placeholder="Re-enter Password" required>
+        <input type="text" id="aadhar" placeholder="Aadhar Number" required>
+        <button type="submit">SUBMIT</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("registerForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+  const password = document.getElementById("password").value;
+  const repassword = document.getElementById("repassword").value;
+
+  if (password !== repassword) {
+    alert("Passwords do not match!");
+    return;
+  }
+
+  const user = {
+    name: document.getElementById("name").value,
+    dob: document.getElementById("dob").value,
+    father: document.getElementById("father").value,
+    email: document.getElementById("email").value,
+    mobile: document.getElementById("mobile").value,
+    password,
+    aadhar: document.getElementById("aadhar").value
+  };
+
+  const res = await fetch("http://localhost:5000/api/auth/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(user)
+  });
+
+  const data = await res.json();
+  if (res.ok) {
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("loggedInUser", JSON.stringify(data.user));
+    window.location.href = "login.html";
+  } else {
+    alert(data.message);
+  }
+});
+
+  </script>
+</body>
+</html>
